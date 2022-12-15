@@ -74,11 +74,11 @@ UPDATE_ATTRS = (
 )
 
 class BleakClient(BleakClientOri):
-    async def read_gatt_char(self, **kwargs):
+    async def read_gatt_char(self, *args, **kwargs):
         randsleep = random.randrange(10, 3000)
         logger.warning(f"sleeping for {randsleep/1000}")
         await asyncio.sleep(randsleep/1000)
-        return super().read_gatt_char(**kwargs)
+        return super().read_gatt_char(*args, **kwargs)
 
 
 class EmberMugConnection:
