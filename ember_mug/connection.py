@@ -169,6 +169,7 @@ class EmberMugConnection:
 
     async def get_meta(self) -> MugMeta:
         """Fetch Meta info from the mug (Serial number and ID)."""
+        logger.warning("hacking metdata and returning fake")
         return MugMeta.from_bytes(b'Yw====-ABCDEFGHIJ')
         # return MugMeta.from_bytes(await self._client.read_gatt_char(UUID_MUG_ID))
 
