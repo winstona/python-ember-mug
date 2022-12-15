@@ -78,7 +78,7 @@ UPDATE_ATTRS = (
 @abc.abstractmethod
 async def read_gatt_char_override(self, *args, **kwargs) -> bytearray:
     randsleep = random.randrange(10, 3000)
-    logger.warning(f"sleeping for {randsleep/1000}")
+    logger.warning(f"{args}: sleeping for {randsleep/1000}")
     await asyncio.sleep(randsleep/1000)
     return await self.read_gatt_char_ori(*args, **kwargs)
 
