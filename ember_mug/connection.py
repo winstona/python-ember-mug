@@ -9,7 +9,7 @@ from datetime import datetime, timezone
 from typing import TYPE_CHECKING, Any, Callable
 import random
 
-from bleak import BleakClient as BleakClientOri, BleakError
+from bleak import BleakClient, BleakError
 from bleak.backends.characteristic import BleakGATTCharacteristic
 from bleak.backends.device import BLEDevice
 from bleak_retry_connector import establish_connection
@@ -73,12 +73,12 @@ UPDATE_ATTRS = (
     "battery_voltage",
 )
 
-class BleakClient(BleakClientOri):
-    async def read_gatt_char(self, *args, **kwargs):
-        randsleep = random.randrange(10, 3000)
-        logger.warning(f"sleeping for {randsleep/1000}")
-        await asyncio.sleep(randsleep/1000)
-        return super().read_gatt_char(*args, **kwargs)
+# class BleakClient(BleakClientOri):
+async def read_gatt_char_override(self, *args, **kwargs):
+    randsleep = random.randrange(10, 3000)
+    logger.warning(f"sleeping for {randsleep/1000}")
+    await asyncio.sleep(randsleep/1000)
+    return self.read_gatt_char_ori(*args, **kwargs)
 
 
 class EmberMugConnection:
@@ -123,6 +123,11 @@ class EmberMugConnection:
                     ble_device_callback=lambda: self._device,
                     **self._client_kwargs,
                 )
+
+                self._client.read_gatt_char_ori = self._client.read_gatt_char
+                self._client.read_gatt_char = read_gatt_char_override
+
+
             except (asyncio.TimeoutError, BleakError) as error:
                 logger.error(f"{self.mug.device}: Failed to connect to the lock: {error}")
                 raise error
