@@ -169,7 +169,8 @@ class EmberMugConnection:
 
     async def get_meta(self) -> MugMeta:
         """Fetch Meta info from the mug (Serial number and ID)."""
-        return MugMeta.from_bytes(await self._client.read_gatt_char(UUID_MUG_ID))
+        return MugMeta.from_bytes(0b000000000)
+        # return MugMeta.from_bytes(await self._client.read_gatt_char(UUID_MUG_ID))
 
     async def get_battery(self) -> BatteryInfo:
         """Get Battery percent from mug gatt."""
