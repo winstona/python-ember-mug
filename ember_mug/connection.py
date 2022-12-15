@@ -1,6 +1,7 @@
 """Objects and methods related to connection to the mug."""
 from __future__ import annotations
 
+import abc
 import asyncio
 import contextlib
 import logging
@@ -74,7 +75,8 @@ UPDATE_ATTRS = (
 )
 
 # class BleakClient(BleakClientOri):
-async def read_gatt_char_override(self, *args, **kwargs):
+@abc.abstractmethod
+async def read_gatt_char_override(self, *args, **kwargs) -> bytearray:
     randsleep = random.randrange(10, 3000)
     logger.warning(f"sleeping for {randsleep/1000}")
     await asyncio.sleep(randsleep/1000)
