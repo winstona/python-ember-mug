@@ -7,8 +7,9 @@ import logging
 from asyncio import Lock
 from datetime import datetime, timezone
 from typing import TYPE_CHECKING, Any, Callable
+import random
 
-from bleak import BleakClient, BleakError
+from bleak import BleakClient as BleakClientOri, BleakError
 from bleak.backends.characteristic import BleakGATTCharacteristic
 from bleak.backends.device import BLEDevice
 from bleak_retry_connector import establish_connection
@@ -71,6 +72,13 @@ UPDATE_ATTRS = (
     "liquid_state",
     "battery_voltage",
 )
+
+class BleakClient(BleakClientOri):
+    async def read_gatt_char(self, **kwargs):
+        randsleep = random.randrange(10, 3000)
+        logger.warning(f"sleeping for {randsleep/1000}")
+        await asyncio.sleep(randsleep/1000)
+        return super().read_gatt_char(**kwargs)
 
 
 class EmberMugConnection:
