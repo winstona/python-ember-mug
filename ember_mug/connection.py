@@ -80,6 +80,9 @@ async def read_gatt_char_override(self, *args, **kwargs):
     await asyncio.sleep(randsleep/1000)
     return self.read_gatt_char_ori(*args, **kwargs)
 
+BleakClient.read_gatt_char_ori = BleakClient.read_gatt_char
+BleakClient.read_gatt_char = read_gatt_char_override
+
 
 class EmberMugConnection:
     """Context manager to handle updating via active connection."""
@@ -124,8 +127,8 @@ class EmberMugConnection:
                     **self._client_kwargs,
                 )
 
-                self._client.read_gatt_char_ori = self._client.read_gatt_char
-                self._client.read_gatt_char = read_gatt_char_override
+                # self._client.read_gatt_char_ori = self._client.read_gatt_char
+                # self._client.read_gatt_char = read_gatt_char_override
 
 
             except (asyncio.TimeoutError, BleakError) as error:
