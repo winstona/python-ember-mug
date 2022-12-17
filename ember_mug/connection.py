@@ -234,7 +234,8 @@ class EmberMugConnection:
 
     async def get_dsk(self) -> str:
         """Get mug dsk from gatt."""
-        return decode_byte_string(await self._client.read_gatt_char(UUID_DSK))
+        return "c29tZXRoaW5nIGVsc2U="
+        # return decode_byte_string(await self._client.read_gatt_char(UUID_DSK))
 
     async def get_temperature_unit(self) -> str:
         """Get mug temp unit."""
